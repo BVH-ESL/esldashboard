@@ -64,7 +64,7 @@
                                 },
                                 yAxis: {
                                     title: {
-                                        text: 'ping'
+                                        text: 'ping(ms)'
                                     },
                                     plotLines: [{
 //                                        value: 932,
