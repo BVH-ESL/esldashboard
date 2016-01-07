@@ -14,17 +14,19 @@
                 console.log(data_rttt);
                 $('#container2').highcharts({
                     chart: {
-                        type: 'boxplot'
+                        type: 'boxplot',
+                        width: 800,
+                        height: 500
+//                        marginLeft:
+                    },
+                    loading: {
+                        hideDuration: 1000,
+                        showDuration: 5000
                     },
                     title: {
                         text: '8.8.8.8 ping test'
                     },
-                    legend: {
-//                        enabled: false
-                    },
                     xAxis: {
-//                        categories: ['1', '2', '3', '4', '5'],
-                        categories: data_show,
                         title: {
                             text: 'Experiment No.'
                         }
@@ -32,19 +34,7 @@
                     yAxis: {
                         title: {
                             text: 'ping(ms)'
-                        },
-                        plotLines: [{
-//                                        value: 932,
-//                                        color: 'red',
-//                                        width: 1,
-//                                        label: {
-//                                            text: 'Theoretical mean: 932',
-//                                            align: 'center',
-//                                            style: {
-//                                                color: 'gray'
-//                                            }
-//                                        }
-                            }]
+                        }
                     },
                     series: [{
                             name: 'google',
@@ -53,39 +43,26 @@
                                 headerFormat: '<em>Experiment No {point.key}</em><br/>'
                             }
                         }
-//                        , {
-//                            name: 'Outlier',
-//                            color: Highcharts.getOptions().colors[0],
-//                            type: 'scatter',
-//                            data: [// x, y positions where 0 is the first category
-//                                [0, 644],
-//                                [4, 718],
-//                                [4, 951],
-//                                [4, 969]
-//                            ],
-//                            marker: {
-//                                fillColor: 'white',
-//                                lineWidth: 1,
-//                                lineColor: Highcharts.getOptions().colors[0]
-//                            },
-//                            tooltip: {
-//                                pointFormat: 'Observation: {point.y}'
-//                            }
-//                        }
                     ]
                 });
             });
 
             var data_show = [];
             var data_rttt = [];
+//            var chart = $('#container2').highcharts();
             $.getJSON("jsonfile/ping.json", {
+//                var chart = $('#container2').highcharts();
+//                chart.showLoading();
             }).done(function (json) {
                 var chart = $('#container2').highcharts();
+                chart.showLoading();
                 var data_x = [];
-                var data_y = new Array();
                 var data_rtt = [];
+                var count = 0;
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].host === "8.8.8.8") {
+                        console.log(json[i].timestamp);
+                        data_x[count] = json[i].timestamp.substring(11);
 //                        console.log(json[i].rtt_avg);
                         data_x[data_x.length] = data_x.length + 1;
                         data_rtt[0] = parseFloat(json[i].rtt_min);
@@ -93,18 +70,21 @@
                         data_rtt[2] = parseFloat(json[i].rtt_avg);
                         data_rtt[3] = parseFloat(json[i].rtt_max);
                         data_rtt[4] = parseFloat(json[i].rtt_max);
-                        console.log(data_rtt);
+//                        console.log(data_rtt);
                         chart.series[0].addPoint(data_rtt);
+                        count++;
 //                        data_y.push(data_rtt);
 //                        console.log(data_y);
                     }
                 }
-//                console.log(data_y);
+
+                console.log(data_x);
 //                data_show = data_x;
 //                data_rttt = data_y;
 //                var chart = $('#container2').highcharts();
 //                chart.series[0].setData(data_y);
                 chart.xAxis[0].setCategories(data_x);
+                chart.hideLoading();
 //                console.log(chart);
             });
 
@@ -118,6 +98,6 @@
         <script src="chart/Highcharts-4.2.1/js/highcharts.js" type="text/javascript"></script>
         <script src="chart/Highcharts-4.2.1/js/highcharts-more.js" type="text/javascript"></script>
         <script src="chart/Highcharts-4.2.1/js/modules/exporting.js" type="text/javascript"></script>
-        <div id="container2" style="height: 400px; margin: auto; min-width: 310px; max-width: 600px"></div>
+        <div id="container2" style=" margin: auto; min-width: 310px; max-width: 600px"></div>
     </body>
 </html>
