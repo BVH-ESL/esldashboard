@@ -10,63 +10,30 @@
             /*${demo.css}*/
         </style>
         <script type="text/javascript">
-            var finishReadJSON = false;
-            var data_show = [];
-            var data_rttt = [];
-            $.getJSON("jsonfile/ping.json", {
-            })
-                    .done(function (json) {
-                        var data_x = [];
-                        var data_y = [];
-                        var data_rtt = [];
-                        for (var i = 0; i < json.length; i++) {
-//                    console.log(json[i]);
-                            if (json[i].host === "8.8.8.8") {
-
-                                data_x[data_x.length] = data_x.length + 1;
-                                data_rtt[0] = parseFloat(json[i].rtt_min);
-                                data_rtt[1] = parseFloat(json[i].rtt_min);
-//                        data_rtt[1] = parseFloat(json[i].rtt_avg-0.1);
-                                data_rtt[2] = parseFloat(json[i].rtt_avg);
-//                        data_rtt[3] = parseFloat(json[i].rtt_avg+0.1);
-                                data_rtt[3] = parseFloat(json[i].rtt_max);
-                                data_rtt[4] = parseFloat(json[i].rtt_max);
-                                data_y[data_y.length] = data_rtt;
-//                            data_y.length++;
-//                        console.log(data_x);
-//                        count++;
-//                        console.log(json[i].host);
-                            }
-                        }
-//                        finishReadJSON = true;
-
-                        data_show = data_x;
-                        data_rttt = data_y;
-//                        console.log(data_rttt);
-                        $(function () {
-                            console.log(data_rttt);
-                            $('#container2').highcharts({
-                                chart: {
-                                    type: 'boxplot'
-                                },
-                                title: {
-                                    text: '8.8.8.8 ping test'
-                                },
-                                legend: {
+            $(function () {
+                console.log(data_rttt);
+                $('#container2').highcharts({
+                    chart: {
+                        type: 'boxplot'
+                    },
+                    title: {
+                        text: '8.8.8.8 ping test'
+                    },
+                    legend: {
 //                        enabled: false
-                                },
-                                xAxis: {
+                    },
+                    xAxis: {
 //                        categories: ['1', '2', '3', '4', '5'],
-                                    categories: data_show,
-                                    title: {
-                                        text: 'Experiment No.'
-                                    }
-                                },
-                                yAxis: {
-                                    title: {
-                                        text: 'ping(ms)'
-                                    },
-                                    plotLines: [{
+                        categories: data_show,
+                        title: {
+                            text: 'Experiment No.'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'ping(ms)'
+                        },
+                        plotLines: [{
 //                                        value: 932,
 //                                        color: 'red',
 //                                        width: 1,
@@ -77,15 +44,15 @@
 //                                                color: 'gray'
 //                                            }
 //                                        }
-                                        }]
-                                },
-                                series: [{
-                                        name: 'google',
-                                        data: data_rttt,
-                                        tooltip: {
-                                            headerFormat: '<em>Experiment No {point.key}</em><br/>'
-                                        }
-                                    }
+                            }]
+                    },
+                    series: [{
+                            name: 'google',
+                            data: [],
+                            tooltip: {
+                                headerFormat: '<em>Experiment No {point.key}</em><br/>'
+                            }
+                        }
 //                        , {
 //                            name: 'Outlier',
 //                            color: Highcharts.getOptions().colors[0],
@@ -105,10 +72,43 @@
 //                                pointFormat: 'Observation: {point.y}'
 //                            }
 //                        }
-                                ]
-                            });
-                        });
-                    });
+                    ]
+                });
+            });
+
+            var data_show = [];
+            var data_rttt = [];
+            $.getJSON("jsonfile/ping.json", {
+            }).done(function (json) {
+                var chart = $('#container2').highcharts();
+                var data_x = [];
+                var data_y = new Array();
+                var data_rtt = [];
+                for (var i = 0; i < json.length; i++) {
+                    if (json[i].host === "8.8.8.8") {
+//                        console.log(json[i].rtt_avg);
+                        data_x[data_x.length] = data_x.length + 1;
+                        data_rtt[0] = parseFloat(json[i].rtt_min);
+                        data_rtt[1] = parseFloat(json[i].rtt_min);
+                        data_rtt[2] = parseFloat(json[i].rtt_avg);
+                        data_rtt[3] = parseFloat(json[i].rtt_max);
+                        data_rtt[4] = parseFloat(json[i].rtt_max);
+                        console.log(data_rtt);
+                        chart.series[0].addPoint(data_rtt);
+//                        data_y.push(data_rtt);
+//                        console.log(data_y);
+                    }
+                }
+//                console.log(data_y);
+//                data_show = data_x;
+//                data_rttt = data_y;
+//                var chart = $('#container2').highcharts();
+//                chart.series[0].setData(data_y);
+                chart.xAxis[0].setCategories(data_x);
+//                console.log(chart);
+            });
+
+
         </script>
     </head>
     <body>
