@@ -19,6 +19,9 @@
                         height: 500
 //                        marginLeft:
                     },
+                    tooltip: {
+//                        animation : false
+                    },
                     loading: {
                         hideDuration: 1000,
                         showDuration: 5000
@@ -36,6 +39,20 @@
                             text: 'ping(ms)'
                         }
                     },
+                    plotOptions: {
+            boxplot: {
+                fillColor: '#F0F0E0',
+                lineWidth: 2,
+                medianColor: '#0C5DA5',
+                medianWidth: 3,
+                stemColor: '#A63400',
+                stemDashStyle: 'dot',
+                stemWidth: 1,
+                whiskerColor: '#3D9200',
+                whiskerLength: '20%',
+                whiskerWidth: 3
+            }
+        },
                     series: [{
                             name: 'google',
                             data: [],
@@ -44,6 +61,7 @@
                             }
                         }
                     ]
+                    
                 });
             });
 
