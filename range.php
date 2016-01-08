@@ -10,6 +10,7 @@
             /*${demo.css}*/
         </style>
         <script type="text/javascript">
+            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?limit=100";
             $(function () {
                 $('#container2').highcharts({
                     title: {
@@ -53,7 +54,7 @@
             var data_show = [];
             var data_rttt = [];
 //            var chart = $('#container2').highcharts();
-            $.getJSON("jsonfile/ping.json", {
+            $.getJSON(jsonPingLink, {
 //                var chart = $('#container2').highcharts();
 //                chart.showLoading();
             }).done(function (json) {
@@ -68,7 +69,8 @@
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].host === "8.8.8.8") {
 //                        console.log(json[i].timestamp);
-                        data_x[count] = json[i].timestamp.substring(11);
+                        var hour = parseInt(json[i].timestamp.substr(json[i].timestamp.indexOf("T") + 1, 2)) + 7;
+                        data_x[count] = json[i].timestamp.substr(5, 5) + "/" + hour + ":" + json[i].timestamp.substr(json[i].timestamp.indexOf("T") + 4, 2);
 //                        console.log(json[i].rtt_avg);
 //                        data_x[data_x.length] = data_x.length + 1;
 
@@ -105,14 +107,14 @@
                 }
             }
             function changeData(url, str) {
-                $.getJSON("jsonfile/ping.json", {
+                $.getJSON(jsonPingLink, {
 //                var chart = $('#container2').highcharts();
 //                chart.showLoading();
                 }).done(function (json) {
-                   
+
 //                    removeChart();
                     var chart = $('#container2').highcharts();
-                     chart.showLoading();
+                    chart.showLoading();
                     chart.series[0].setData([]);
                     chart.series[1].setData([]);
                     chart.setTitle({text: "ping test " + str});
@@ -126,7 +128,8 @@
                     for (var i = 0; i < json.length; i++) {
                         if (json[i].host === url) {
 //                        console.log(json[i].timestamp);
-                            data_x[count] = json[i].timestamp.substring(11);
+                            var hour = parseInt(json[i].timestamp.substr(json[i].timestamp.indexOf("T") + 1, 2)) + 7;
+                            data_x[count] = json[i].timestamp.substr(5, 5) + "/" + hour + ":" + json[i].timestamp.substr(json[i].timestamp.indexOf("T") + 4, 2);
 //                        console.log(json[i].rtt_avg);
 //                        data_x[data_x.length] = data_x.length + 1;
 
@@ -151,7 +154,7 @@
                     }
 //                console.log(data_ranges);
                     chart.xAxis[0].setCategories(data_x);
-                     chart.hideLoading();
+                    chart.hideLoading();
                 });
             }
         </script>
