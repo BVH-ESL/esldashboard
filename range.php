@@ -10,7 +10,7 @@
             /*${demo.css}*/
         </style>
         <script type="text/javascript">
-            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?limit=100";
+            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?limit=450";
             $(function () {
                 $('#container2').highcharts({
                     title: {
@@ -166,12 +166,12 @@
         <script src="chart/Highcharts-4.2.1/js/highcharts.js" type="text/javascript"></script>
         <script src="chart/Highcharts-4.2.1/js/highcharts-more.js" type="text/javascript"></script>
         <script src="chart/Highcharts-4.2.1/js/modules/exporting.js" type="text/javascript"></script>
-        <div id="container2" style=" margin: auto; min-width: 310px; max-width: 600px"></div>
+        <div id="container2" style=" margin: auto; min-width: 310px; max-width: 90%"></div>
     <center>
-        <img src="img/google.jpg" width="150px;" height="150px" alt="" onclick="changeData('8.8.8.8', 'google')"/>
-        <img src="img/facebook.png" width="150px;" height="150px" alt="" onclick="changeData('31.13.95.36', 'facebook')"/>
-        <img src="img/eng.jpg" width="150px;" height="150px" alt="" onclick="changeData('202.44.37.51', 'Eng KMUTNB')"/>
-        <img src="img/dg.png" width="150px;" height="150px" alt="" onclick="changeData('192.168.10.254', 'Default GateWay')"/>
+        <img src="img/google.jpg" width="100px;" height="100px" alt="" onclick="changeData('8.8.8.8', 'google')"/>
+        <img src="img/facebook.png" width="100px;" height="100px" alt="" onclick="changeData('31.13.95.36', 'facebook')"/>
+        <img src="img/eng.jpg" width="100px;" height="100px" alt="" onclick="changeData('202.44.37.51', 'Eng KMUTNB')"/>
+        <img src="img/dg.png" width="100px;" height="100px" alt="" onclick="changeData('192.168.10.254', 'Default GateWay')"/>
         <!--<img src="../../img/thumbnails/picjumbo.com_IMG_3241.jpg" >-->
     </center>
 </body>
