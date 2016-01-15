@@ -17,10 +17,10 @@
             var dataJSON;
 //            console.log(dayNow.toJSON());
 //            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?eq[host]="+link+"&lte[timestamp]=2016-01-12T16:30:32.156Z&gte[timestamp]=2016-01-11T00:00:32.003Z";
-            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON();
+//            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON();
 
             function readJSON(url, str) {
-                jsonPingLink += "&eq[host]=" + url;
+                jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[host]=" + url;
                 $.getJSON(jsonPingLink, {
 //                var chart = $('#container2').highcharts();
 //                chart.showLoading();
@@ -32,6 +32,7 @@
             function drawGraph(str){
                 var chart = $('#container2').highcharts();
                 console.log("drawGraph");
+                
             }
             function graph(url, str, id) {
                 
