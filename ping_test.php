@@ -14,6 +14,8 @@
             var dayNow = new Date();
             var dayThen = new Date();
             dayThen.setDate(dayNow.getDate() - 1);
+
+//            chart.showLoading();
             var dataJSON;
 //            console.log(dayNow.toJSON());
 //            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?eq[host]="+link+"&lte[timestamp]=2016-01-12T16:30:32.156Z&gte[timestamp]=2016-01-11T00:00:32.003Z";
@@ -21,21 +23,22 @@
 
             function readJSON(url, str) {
                 jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[host]=" + url;
-                $.getJSON(jsonPingLink, {
-//                var chart = $('#container2').highcharts();
-//                chart.showLoading();
-                }).done(function (json) {
-                    dataJSON = json;
-                    drawGraph(str);
-                });
-            }
-            function drawGraph(str){
                 var chart = $('#container2').highcharts();
-                console.log("drawGraph");
+                chart.showLoading();
+                $.getJSON(jsonPingLink, {
+                })
+                        .done(function (json) {
+                            dataJSON = json;
+                            drawGraph(str);
+                        })
+
+                        ;
+            }
+            function drawGraph(str) {
                 
             }
             function graph(url, str, id) {
-                
+
                 //show graph
                 if (document.getElementById(id).alt === '1') {
                     document.getElementById(id).style.filter = 'grayscale(0)';
@@ -87,9 +90,7 @@
                         }
                     ]
                 });
-            });
-
-        </script>
+            });</script>
     </head>
     <body>
 <!--        <script src="https://code.highcharts.com/highcharts.js"></script>
