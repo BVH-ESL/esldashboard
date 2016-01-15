@@ -35,7 +35,9 @@
                         ;
             }
             function drawGraph(str) {
-                
+                var chart = $('#container2').highcharts();
+                chart.hideLoading();
+                console.log(dataJSON);
             }
             function graph(url, str, id) {
 
