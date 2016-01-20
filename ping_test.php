@@ -10,6 +10,8 @@
             /*${demo.css}*/
         </style>
         <script type="text/javascript">
+            var list_graph = new Array();
+            var limit = 50;
             var link = "8.8.8.8";
             var dayNow = new Date();
             var dayThen = new Date();
@@ -22,9 +24,10 @@
 //            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON();
 
             function readJSON(url, str) {
-                jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[host]=" + url;
+                jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?limit=" + limit + "&lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[host]=" + url;
                 var chart = $('#container2').highcharts();
                 chart.showLoading();
+//                console.log(jsonPingLink);
                 $.getJSON(jsonPingLink, {
                 })
                         .done(function (json) {
@@ -34,26 +37,111 @@
 
                         ;
             }
+
             function drawGraph(str) {
                 var chart = $('#container2').highcharts();
-                chart.hideLoading();
-                console.log(dataJSON);
-            }
-            function graph(url, str, id) {
+                var index = list_graph.indexOf(str);
+                var index_avg = 2 * index;
+                var index_range = 2 * index + 1;
+                console.log(chart.series.length);
+//                if (chart.series.length !== index_range) {
+//                    chart.addSeries({
+//                        name: str
+//                    });
+//                    chart.addSeries({
+//                        name: 'range' + str,
+//                        type: 'arearange',
+//                        lineWidth: 0,
+//                        linkedTo: ':previous',
+//                        color: Highcharts.getOptions().colors[index_avg],
+//                        fillOpacity: 0.3,
+//                        zIndex: 0
+//                    });
+//                }
+                var data_x = [];
+                var data_ranges = [];
+                var data_avg = [];
+                var data_range = [];
+                var count = 0;
+                for (var i = dataJSON.length - 1; i >= 0; i--) {
+                    var d = new Date(Date.UTC(dataJSON[i].timestamp.substr(0, 4), parseInt(dataJSON[i].timestamp.substr(5, 2)) - 1, dataJSON[i].timestamp.substr(8, 2), dataJSON[i].timestamp.substr(11, 2), dataJSON[i].timestamp.substr(14, 2), dataJSON[i].timestamp.substr(17, 2)));
+                    data_x[count] = d.getDay() + '-' + d.getMonth() + 1 + '/' + d.getHours() + ':' + d.getMinutes();
+                    data_avg[0] = 0.0;
+                    data_avg[1] = parseFloat(dataJSON[i].rtt_avg);
 
+                    data_range[0] = count;
+                    data_range[1] = parseFloat(dataJSON[i].rtt_min);
+                    data_range[2] = parseFloat(dataJSON[i].rtt_max);
+
+//                        chart.series[0].addPoint(data_avg);
+//                        chart.series[1].addPoint(data_range);
+//                        data_avgs[count] = data_avg;
+                    data_ranges[count] = data_range;
+                    count++;
+//                        data_y.push(data_rtt);
+//                        console.log(chart.series[0]);
+//                        console.log(data_range);
+                    chart.series[index_avg].addPoint(data_avg[1]);
+                    chart.series[index_range].addPoint(data_range);
+                }
+                chart.series[index_avg].name = str;
+                chart.xAxis[0].setCategories(data_x);
+                chart.hideLoading();
+            }
+
+            function graph(url, str, id) {
                 //show graph
                 if (document.getElementById(id).alt === '1') {
+                    if (list_graph.indexOf(str) === -1) {
+                        list_graph.push(str);
+                        var index = list_graph.indexOf(str);
+                        var index_avg = 2 * index;
+                        var chart = $('#container2').highcharts();
+                        chart.addSeries({
+                            name: str
+                        });
+                        chart.addSeries({
+                            name: 'range' + str,
+                            type: 'arearange',
+                            lineWidth: 0,
+                            linkedTo: ':previous',
+                            color: Highcharts.getOptions().colors[index_avg],
+                            fillOpacity: 0.3,
+                            zIndex: 0
+                        });
+                        readJSON(url, str);
+                    } else {
+                        var chart = $('#container2').highcharts();
+                        var index = list_graph.indexOf(str);
+                        var index_avg = 2 * index;
+                        var index_range = 2 * index + 1;
+                        if (chart.series.length) {
+                            chart.series[index_range].show();
+                            chart.series[index_avg].show();
+                        }
+                    }
+//                    console.log(list_graph);
                     document.getElementById(id).style.filter = 'grayscale(0)';
                     document.getElementById(id).style.webkitFilter = 'grayscale(0)';
                     document.getElementById(id).alt = 0;
-                    readJSON(url, str);
+                    
                 } else if (document.getElementById(id).alt === '0') {
                     document.getElementById(id).style.filter = 'grayscale(1)';
                     document.getElementById(id).style.webkitFilter = 'grayscale(1)';
                     document.getElementById(id).alt = 1;
+                    removeChart(str);
                 }
             }
-
+            function removeChart(str) {
+                var chart = $('#container2').highcharts();
+                var index = list_graph.indexOf(str);
+                var index_avg = 2 * index;
+                var index_range = 2 * index + 1;
+                if (chart.series.length) {
+                    chart.series[index_range].hide();
+                    chart.series[index_avg].hide();
+                }
+            }
             $(function () {
                 $('#container2').highcharts({
                     title: {
@@ -75,22 +163,23 @@
                     },
                     legend: {
                     },
-                    series: [{
-                            name: 'avg ping'
-//                            data: averages,
-
-                        }
-                        , {
-                            name: 'Range ping',
-//                            data: ranges,
-                            type: 'arearange',
-                            lineWidth: 0,
-                            linkedTo: ':previous',
-                            color: Highcharts.getOptions().colors[0],
-                            fillOpacity: 0.3,
-                            zIndex: 0
-                        }
-                    ]
+//                    series:
+//                            [{
+//                            name: 'avg ping'
+////                            data: averages,
+//
+//                        }
+//                        , {
+//                            name: 'Range ping',
+////                            data: ranges,
+//                            type: 'arearange',
+//                            lineWidth: 0,
+//                            linkedTo: ':previous',
+//                            color: Highcharts.getOptions().colors[0],
+//                            fillOpacity: 0.3,
+//                            zIndex: 0
+//                        }
+//                    ]
                 });
             });</script>
     </head>
