@@ -44,20 +44,6 @@
                 var index_avg = 2 * index;
                 var index_range = 2 * index + 1;
                 console.log(chart.series.length);
-//                if (chart.series.length !== index_range) {
-//                    chart.addSeries({
-//                        name: str
-//                    });
-//                    chart.addSeries({
-//                        name: 'range' + str,
-//                        type: 'arearange',
-//                        lineWidth: 0,
-//                        linkedTo: ':previous',
-//                        color: Highcharts.getOptions().colors[index_avg],
-//                        fillOpacity: 0.3,
-//                        zIndex: 0
-//                    });
-//                }
                 var data_x = [];
                 var data_ranges = [];
                 var data_avg = [];
@@ -124,7 +110,7 @@
                     document.getElementById(id).style.filter = 'grayscale(0)';
                     document.getElementById(id).style.webkitFilter = 'grayscale(0)';
                     document.getElementById(id).alt = 0;
-                    
+
                 } else if (document.getElementById(id).alt === '0') {
                     document.getElementById(id).style.filter = 'grayscale(1)';
                     document.getElementById(id).style.webkitFilter = 'grayscale(1)';
