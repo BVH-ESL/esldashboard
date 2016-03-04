@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Monitoring System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Fonts -->
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <!-- CSS Libs -->
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/animate.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/checkbox3.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/select2.min.css" rel="stylesheet" type="text/css"/>
+  <!-- CSS App -->
+  <!--<link rel="stylesheet" type="text/css" href="../../css/style.css">-->
+  <link href="../flat-admin-bootstrap-templates-master/css/style.css" rel="stylesheet" type="text/css"/>
+  <!--<link rel="stylesheet" type="text/css" href="../../css/themes/flat-blue.css">-->
+  <link href="../flat-admin-bootstrap-templates-master/css/themes/flat-blue.css" rel="stylesheet" type="text/css"/>
+  <script src="../jquery-1.8.3.min.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    // var numNode = 1;
+    var listNode = ['esl-openwrt', 'esl-yun1'];
+    var jsonClientsLink = "http://192.168.106.17:8080/output/3jZmxE01ElIKwXmAbv2WTql0mwrL.json?limit=250";
+    var mainTitle = ['OpenWrt Node 1 Clinet Scan', 'OpenWrt Node 2 Clinet Scan'];
+    var data;
+    var period = 6*1000;
+    var clients = [[]];
+
+    var chart = [];
+    $(function () {
+      $('#client1').highcharts({
+        title: {
+          text: mainTitle[0]
+        },
+        xAxis: {
+          text: "time"
+        },
+        yAxis: {
+          title: {
+            text: "Clinets"
+          }
+        },
+        tooltip: {
+        },
+        legend: {
+        },
+        series: [{
+          name: 'Clinets',
+        }]
+      });
+    });
+
+    $(function () {
+      $('#client2').highcharts({
+        title: {
+          text: mainTitle[0]
+        },
+        xAxis: {
+          text: "time"
+        },
+        yAxis: {
+          title: {
+            text: "Clinets"
+          }
+        },
+        tooltip: {
+        },
+        legend: {
+        },
+        series: [{
+          name: 'Clinets',
+        }]
+      });
+    });
+
+    function draw(){
+      var startHour = [];
+      for(var i = 0; i < listNode.length; i++){
+        var idChart = "#ping"+(i+1);
+        chart [i] = $(idChart).highcharts();
+        var count = 0;
+
+        startHour[i] = 0;
+        // console.log(data.length - 1);
+        for(var j = data.length - 1; j >= 0; j--){
+          if(data[j].dev_id === listNode[i]){
+            var date = new Date(Date.UTC(data[j].timestamp.substr(0, 4), parseInt(data[j].timestamp.substr(5, 2)) - 1, data[j].timestamp.substr(8, 2), data[j].timestamp.substr(11, 2), data[j].timestamp.substr(14, 2), data[j].timestamp.substr(17, 2)));
+            if(startHour[i] === 0){
+              startHour[i] = date.getTime();
+            }
+            if (date.getTime() - startHour[i] >= 0 && date.getTime() - startHour[i] <= period) {
+              var chartIndex = list_graph[i].indexOf(data[j].target);
+              if (chartIndex === 0) {
+                data_x[i][count] = date.getDay() + '-' + date.getMonth() + 1 + '/' + date.getHours() + ':' + date.getMinutes();
+              }
+
+            }
+          }
+          count++;
+        }
+        data_avg[i].push(temp_data_avg);
+        chart[i].xAxis[0].setCategories(data_x[i]);
+        for(var j = 0; j < list_graph[i].length; j++){
+          chart[i].series[j].setData(data_avg[i][j]);
+          // data_avg[i][j].splice(0,data_avg[i][j].length)
+        }
+      }
+    }
+
+    function update(){
+      $.getJSON(jsonPingLink, {})
+      .done(function (json) {
+        data = json;
+        draw();
+      });
+    }
+
+    setInterval(update, 60000);
+  </script>
+</head>
+
+<body class="flat-blue" onload="update()">
+  <div class="app-container">
+    <div class="row content-container">
+      <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-expand-toggle">
+              <i class="fa fa-bars icon"></i>
+            </button>
+            <ol class="breadcrumb navbar-breadcrumb">
+              <li class="active">Clients Scan</li>
+            </ol>
+          </div>
+        </div>
+      </nav>
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="side-menu-container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="../#">
+                <div class="icon fa fa-television"></div>
+                <div class="title">Monitoring System</div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                <i class="fa fa-times icon"></i>
+              </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li class="">
+                <a href="index.html">
+                  <span class="icon fa fa-tachometer"></span><span class="title">Dashboard</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="wifiscan.html">
+                  <span class="icon fa fa-wifi"></span><span class="title">Wifi scan</span>
+                </a>
+              </li>
+              <li class="active">
+                <a href="client.html">
+                  <span class="glyphicon glyphicon-user icon"> </span><span class="title">Clients scan</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="pingtest.html">
+                  <span class="icon fa fa-server"></span><span class="title">Ping testing</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="environment.html">
+                  <span class="icon fa fa-home"></span><span class="title">Room Monitoring </span>
+                </a>
+              </li>
+              <li class="">
+                <a href="">
+                  <span class="icon fa fa-bell-o"></span><span class="title">Alarm System</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <!-- Main Content -->
+      <div class="container-fluid">
+        <div class="side-body padding-top">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="client1" style="margin: auto;"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="client2" style="margin: auto;"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="app-footer">
+  <div class="wrapper">
+    <span class="pull-right"><a href="../#"><i class="fa fa-long-arrow-up"></i></a></span> © 2016 ESL@KMUTNB.
+  </div>
+</footer>
+<!-- Javascript Libs -->
+<!-- ๋ฆ App -->
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/Chart.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.matchHeight-min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.min.js" type="text/javascript"></script>
+<script src="../flat-admin-bootstrap-templates-master/dist/lib/js/select2.full.min.js" type="text/javascript"></script>
+<!-- Javascript -->
+<!--<script type="text/javascript" src="../../js/app.js"></script>-->
+<script src="../flat-admin-bootstrap-templates-master/js/app.js" type="text/javascript"></script>
+<!--<script type="text/javascript" src="../../js/index.js"></script>-->
+<script src="../flat-admin-bootstrap-templates-master/js/index.js" type="text/javascript"></script>
+<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+<!-- chart lib -->
+<script src="../chart/Highcharts-4.2.1/js/highcharts.js" type="text/javascript"></script>
+<script src="../chart/Highcharts-4.2.1/js/modules/exporting.js" type="text/javascript"></script>
+</body>
+
+</html>

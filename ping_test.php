@@ -24,7 +24,7 @@
 //            var jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON();
 
             function readJSON(url, str) {
-                jsonPingLink = "http://192.168.1.10:8080/output/VKN8BojQgytyAddKMoJJSlqelz3.json?limit=" + limit + "&lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[host]=" + url;
+                jsonPingLink = "http://192.168.106.17:8080/output/dm13yy2OX9UDgK6wMQNZT0JOZ4Ao.json?limit=" + limit + "&lte[timestamp]=" + dayNow.toJSON() + "&gte[timestamp]=" + dayThen.toJSON() + "&eq[target]=" + url;
                 var chart = $('#container2').highcharts();
                 chart.showLoading();
 //                console.log(jsonPingLink);
@@ -43,7 +43,7 @@
                 var index = list_graph.indexOf(str);
                 var index_avg = 2 * index;
                 var index_range = 2 * index + 1;
-                console.log(chart.series.length);
+                // console.log(chart.series.length);
                 var data_x = [];
                 var data_ranges = [];
                 var data_avg = [];
@@ -167,7 +167,8 @@
 //                        }
 //                    ]
                 });
-            });</script>
+            });
+            </script>
     </head>
     <body>
 <!--        <script src="https://code.highcharts.com/highcharts.js"></script>
