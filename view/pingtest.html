@@ -29,7 +29,7 @@
     var jsonPingLink = "http://192.168.106.17:8080/output/dm13yy2OX9UDgK6wMQNZT0JOZ4Ao.json?limit=150";
     var mainTitle = ['OpenWrt Node 1 Ping test at'];
     var data;
-    var period = 6*60*60*1000;
+    var period = 12*60*60*1000;
     var list_graph = [['31.13.95.36', '8.8.8.8', '202.44.32.119', '202.44.32.118', '202.44.37.51', '192.168.10.254']];
     // var list_graph = [['192.168.10.254', '202.44.37.51', '202.44.32.118', '202.44.32.119', '8.8.8.8', '31.13.95.36']];
     var data_x = [[]];
@@ -120,10 +120,13 @@
         for(var j = 0; j < list_graph[i].length; j++){
           chart[i].series[j].setData(data_avg[i][j]);
         }
+        chart[i].hideLoading();
       }
     }
 
     function update(){
+      var chart = $('#ping1').highcharts();
+      chart.showLoading();
       $.getJSON(jsonPingLink, {})
       .done(function (json) {
         data = json;
