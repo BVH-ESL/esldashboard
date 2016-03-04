@@ -105,7 +105,7 @@
               temp_data_avg[chartIndex][count] = parseFloat(data[j].rtt_avg);
 
               if (chartIndex === 0) {
-                data_x[i][count] = date.getDay() + '-' + date.getMonth() + 1 + '/' + date.getHours() + ':' + date.getMinutes();
+                data_x[i][count] = date.getDay() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
                 count++;
               }
             }

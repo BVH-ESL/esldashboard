@@ -196,7 +196,7 @@
       var data_pressure = [];
       for(var i = data.length-1; i >= 0; i--){
         var date = new Date(Date.UTC(data[i].timestamp.substr(0, 4), parseInt(data[i].timestamp.substr(5, 2)) - 1, data[i].timestamp.substr(8, 2), data[i].timestamp.substr(11, 2), data[i].timestamp.substr(14, 2), data[i].timestamp.substr(17, 2)));
-        data_x[count] = date.getDay() + '-' + date.getMonth() + 1 + '/' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        data_x[count] = date.getDay() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 
         // data_temperature[count] =
         console.log(date);
