@@ -25,216 +25,396 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <script type="text/javascript">
-    var jsonEnvironmentLink = "http://192.168.106.17:8080/output/6W0EQ3VwqZuq2eyk2AYpIO8lWkv.json?limit=500";
-    var dataJson;
-    var countShow = 0;
-    var hide = {"temperature":"none", "humidity":"none", "light":"none", "pressure":"none"}
-    var mobileChart = {"LinkIt-2-temperature":"none", "LinkIt-2-humidity":"none", "LinkIt-2-light":"none", "LinkIt-2-pressure":"none"}
-    // init chart
-    $(function () {
-      $('#chart-main').highcharts({
-        title:{
-          text: 'History',
-          x: -20
-        },
-        xAxis:{
-          text: "time"
-        },
-        yAxis:{
-          title: {
-            text: ''
-          }
-        },
-        series: [{
-            name: 'temperature',
-            data:[]
-            // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }, {
-            name: 'humidity',
-            data:[]
-            // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-        }, {
-            name: 'light',
-            data:[]
-            // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-        }, {
-            name: 'pressure',
-            data:[]
-            // data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }]
-          // series : [
-          //   {
-          //     name : temperature
-          //   },
-          //   {
-          //     name : humidity
-          //   },
-          //   {
-          //     name : light
-          //   },
-          //   {
-          //     name : pressure
-          //   }
-          // ]
-      })
-    });
+  var jsonEnvironmentLink = "http://192.168.106.17:8080/output/6W0EQ3VwqZuq2eyk2AYpIO8lWkv.json?limit=50";
+  var dataJson;
+  var countShow = 0;
+  var hide = {"temperature":"none", "humidity":"none", "light":"none", "pressure":"none"}
+  var mobileChart = {"LinkIt-2-temperature":"none", "LinkIt-2-humidity":"none", "LinkIt-2-light":"none", "LinkIt-2-pressure":"none"};
+  // init chart
+  $(function () {
+    $('#chart-main').highcharts({
+      title:{
+        text: 'History',
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: ''
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }, {
+        name: 'humidity',
+        data:[]
+        // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+      }, {
+        name: 'light',
+        data:[]
+        // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+      }, {
+        name: 'pressure',
+        data:[]
+        // data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+      }]
+      // series : [
+      //   {
+      //     name : temperature
+      //   },
+      //   {
+      //     name : humidity
+      //   },
+      //   {
+      //     name : light
+      //   },
+      //   {
+      //     name : pressure
+      //   }
+      // ]
+    })
+  });
 
-    $(function () {
-      $('#LinkIt-2-temperature').highcharts({
-        title:{
-          text: 'History temperature',
-          x: -20
-        },
-        xAxis:{
-          text: "time"
-        },
-        yAxis:{
-          title: {
-            text: 'Temperature (°C)'
-          }
-        },
-        series: [{
-            name: 'temperature',
-            data:[]
-            // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }]
-      })
-    });
+  $(function () {
+    $('#LinkIt-2-temperature').highcharts({
+      title:{
+        text: 'History temperature',
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: 'Temperature (°C)'
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }]
+    })
+  });
 
-    $(function () {
-      $('#LinkIt-2-humidity').highcharts({
-        title:{
-          text: 'History humidity',
-          x: -20
-        },
-        xAxis:{
-          text: "time"
-        },
-        yAxis:{
-          title: {
-            text: 'Relative Humidity (%)'
-          }
-        },
-        series: [{
-            name: 'humidity',
-            data:[]
-            // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }]
-      })
-    });
+  $(function () {
+    $('#LinkIt-2-humidity').highcharts({
+      title:{
+        text: 'History humidity',
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: 'Relative Humidity (%)'
+        }
+      },
+      series: [{
+        name: 'humidity',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }]
+    })
+  });
 
-    $(function () {
-      $('#LinkIt-2-light').highcharts({
-        title:{
-          text: 'History light',
-          x: -20
-        },
-        xAxis:{
-          text: "time"
-        },
-        yAxis:{
-          title: {
-            text: 'Lux'
-          }
-        },
-        series: [{
-            name: 'light',
-            data:[]
-            // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }]
-      })
-    });
+  $(function () {
+    $('#LinkIt-2-light').highcharts({
+      title:{
+        text: 'History light',
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: 'Lux'
+        }
+      },
+      series: [{
+        name: 'light',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }]
+    })
+  });
 
-    $(function () {
-      $('#LinkIt-2-pressure').highcharts({
-        title:{
-          text: 'History pressure',
-          x: -20
-        },
-        xAxis:{
-          text: "time"
-        },
-        yAxis:{
-          title: {
-            text: 'hPa'
-          }
-        },
-        series: [{
-            name: 'pressure',
-            data:[]
-            // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-        }]
-      })
-    });
+  $(function () {
+    $('#LinkIt-2-pressure').highcharts({
+      title:{
+        text: 'History pressure',
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: 'hPa'
+        }
+      },
+      series: [{
+        name: 'pressure',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }]
+    })
+  });
 
-    function update(){
-      $.getJSON(jsonEnvironmentLink, {})
-      .done(function (json) {
-        // for (var i = 0; i < json.length; i++) {
-          document.getElementById(json[0].dev_id+'-temperature').innerHTML = json[0].temperature+'°c';
-          document.getElementById(json[0].dev_id+'-humidity').innerHTML = json[0].humidity+'%';
-          document.getElementById(json[0].dev_id+'-light').innerHTML = json[0].light+'lux';
-          document.getElementById(json[0].dev_id+'-pressure').innerHTML = (json[0].pressure)+'hPa';
-        // }
-        data = json;
-        drawAll();
-      });
+  var jsonSensorNodeLink = "http://192.168.106.17:8080/output/gNazkBbg1msr2A8VO1X6tVMy8vrY.json?limit=500";
+  var listSensorNode = ["esl-esp-1", "esl-esp-2", "esl-esp-3", "esl-esp-4"];
+  var mainTitleSensorNode = ["Room Monitoring : Sensor Node 1", "Room Monitoring : Sensor Node 2", "Room Monitoring : Sensor Node 3", "Room Monitoring : Sensor Node 4"];
+  var period = 1000*60*60*5;
+  // var typeSensor = ["temperature"]
+  var dataJSONSensor;
+  var dataSensor = [[]];
+  var dataTimeSensor = [];
+  var chart = [];
+
+  $(function () {
+    $('#eslesp1').highcharts({
+      title:{
+        text: mainTitleSensorNode[0],
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: ''
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }, {
+        name: 'humidity',
+        data:[]
+        // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+      }, {
+        name: 'light',
+        data:[]
+        // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+      }]
+    })
+  });
+
+  $(function () {
+    $('#eslesp2').highcharts({
+      title:{
+        text: mainTitleSensorNode[1],
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: ''
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }, {
+        name: 'humidity',
+        data:[]
+        // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+      }, {
+        name: 'light',
+        data:[]
+        // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+      }]
+    })
+  });
+
+  $(function () {
+    $('#eslesp3').highcharts({
+      title:{
+        text: mainTitleSensorNode[2],
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: ''
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }, {
+        name: 'humidity',
+        data:[]
+        // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+      }, {
+        name: 'light',
+        data:[]
+        // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+      }]
+    })
+  });
+
+  $(function () {
+    $('#eslesp4').highcharts({
+      title:{
+        text: mainTitleSensorNode[3],
+        x: -20
+      },
+      xAxis:{
+        text: "time"
+      },
+      yAxis:{
+        title: {
+          text: ''
+        }
+      },
+      series: [{
+        name: 'temperature',
+        data:[]
+        // data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+      }, {
+        name: 'humidity',
+        data:[]
+        // data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+      }, {
+        name: 'light',
+        data:[]
+        // data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+      }]
+    })
+  });
+
+  function update(){
+    $.getJSON(jsonEnvironmentLink, function() {
+      updateSensorNode();
+    })
+    .done(function (json) {
+
+      // for (var i = 0; i < json.length; i++) {
+      document.getElementById(json[0].dev_id+'-temperature').innerHTML = json[0].temperature+'°c';
+      document.getElementById(json[0].dev_id+'-humidity').innerHTML = json[0].humidity+'%';
+      document.getElementById(json[0].dev_id+'-light').innerHTML = json[0].light+'lux';
+      document.getElementById(json[0].dev_id+'-pressure').innerHTML = (json[0].pressure)+'hPa';
+      // }
+      data = json;
+      drawAll();
+    });
+  }
+
+  function drawAll(){
+    // document.getElementById('chart-main');
+    var chart_main = $('#chart-main').highcharts();
+    var chart_temperature = $('#LinkIt-2-temperature').highcharts();
+    var chart_humidity = $('#LinkIt-2-humidity').highcharts();
+    var chart_light = $('#LinkIt-2-light').highcharts();
+    var chart_pressure = $('#LinkIt-2-pressure').highcharts();
+    var count = 0;
+    var data_x = [];
+    var data_temperature = [];
+    var data_humidity = [];
+    var data_light = [];
+    var data_pressure = [];
+    for(var i = data.length-1; i >= 0; i--){
+      var date = new Date(Date.UTC(data[i].timestamp.substr(0, 4), parseInt(data[i].timestamp.substr(5, 2)) - 1, data[i].timestamp.substr(8, 2), data[i].timestamp.substr(11, 2), data[i].timestamp.substr(14, 2), data[i].timestamp.substr(17, 2)));
+      data_x[count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+
+      // data_temperature[count] =
+      // console.log(date);
+      data_temperature[count] = parseFloat(data[i].temperature);
+      data_humidity[count] = parseFloat(data[i].humidity);
+      data_light[count] = parseFloat(data[i].light);
+      data_pressure[count] = parseFloat(data[i].pressure);
+      count++;
     }
+    chart_main.xAxis[0].setCategories(data_x);
+    // chart_temperature.xAxis[0].setCategories(data_x);
+    // chart_humidity.xAxis[0].setCategories(data_x);
+    // chart_light.xAxis[0].setCategories(data_x);
+    // chart_pressure.xAxis[0].setCategories(data_x);
 
-    function drawAll(){
-      // document.getElementById('chart-main');
-      var chart_main = $('#chart-main').highcharts();
-      var chart_temperature = $('#LinkIt-2-temperature').highcharts();
-      var chart_humidity = $('#LinkIt-2-humidity').highcharts();
-      var chart_light = $('#LinkIt-2-light').highcharts();
-      var chart_pressure = $('#LinkIt-2-pressure').highcharts();
+    chart_main.series[0].setData(data_temperature);
+    // chart_temperature.series[0].setData(data_temperature);
+
+    chart_main.series[1].setData(data_humidity);
+    // chart_humidity.series[0].setData(data_humidity);
+
+    chart_main.series[2].setData(data_light);
+    // chart_light.series[0].setData(data_light);
+
+    chart_main.series[3].setData(data_pressure);
+    // chart_pressure.series[0].setData(data_pressure);
+  }
+
+  function chart(type){
+    if(document.getElementById(type+'-sub').innerHTML === "Show History"){
+      document.getElementById(type+'-sub').innerHTML = "Hide History";
+      countShow++;
+    } else {
+      countShow--;
+      document.getElementById(type+'-sub').innerHTML = "Show History";
+    }
+  }
+
+  function updateSensorNode(){
+    $.getJSON(jsonSensorNodeLink,  {})
+    .done(function (json) {
+      // console.log(json);
+      dataJSONSensor = json;
+      drawSensorGraph();
+    });
+  }
+
+  function drawSensorGraph(){
+    var startHour = [];
+    for(var i = 0; i < listSensorNode.length; i++){
+      var chartId = "#eslesp"+(i+1);
+      chart[i] = $(chartId).highcharts();
+      dataTimeSensor[i] = [];
+      dataSensor[i] = [];
       var count = 0;
-      var data_x = [];
-      var data_temperature = [];
-      var data_humidity = [];
-      var data_light = [];
-      var data_pressure = [];
-      for(var i = data.length-1; i >= 0; i--){
-        var date = new Date(Date.UTC(data[i].timestamp.substr(0, 4), parseInt(data[i].timestamp.substr(5, 2)) - 1, data[i].timestamp.substr(8, 2), data[i].timestamp.substr(11, 2), data[i].timestamp.substr(14, 2), data[i].timestamp.substr(17, 2)));
-        data_x[count] = date.getDay() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-
-        // data_temperature[count] =
-        console.log(date);
-        data_temperature[count] = parseFloat(data[i].temperature);
-        data_humidity[count] = parseFloat(data[i].humidity);
-        data_light[count] = parseFloat(data[i].light);
-        data_pressure[count] = parseFloat(data[i].pressure);
-        count++;
+      dataSensor[i][0] = [];
+      dataSensor[i][1] = [];
+      dataSensor[i][2] = [];
+      for(var j = dataJSONSensor.length-1; j>=0; j--){
+        if(dataJSONSensor[j].dev_id === listSensorNode[i]){
+          var date = new Date(Date.UTC(dataJSONSensor[j].timestamp.substr(0, 4), parseInt(dataJSONSensor[j].timestamp.substr(5, 2)) - 1, dataJSONSensor[j].timestamp.substr(8, 2), dataJSONSensor[j].timestamp.substr(11, 2), dataJSONSensor[j].timestamp.substr(14, 2), dataJSONSensor[j].timestamp.substr(17, 2)));
+          if(startHour[i] === undefined){
+            startHour[i] = date.getTime();
+          }
+          // console.log(date.getTime() - startHour[i]);
+          // console.log(period);
+          if(date.getTime() - startHour[i] >= 0 && date.getTime() - startHour[i] <= period){
+            dataTimeSensor[i][count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes() + ':'+date.getSeconds();
+            dataSensor[i][0][count] = parseFloat(dataJSONSensor[j].temperature);
+            dataSensor[i][1][count] = parseFloat(dataJSONSensor[j].humidity);
+            dataSensor[i][2][count] = parseFloat(dataJSONSensor[j].light);
+            count++;
+            // console.log(date.getDate());
+          }
+        }
       }
-      chart_main.xAxis[0].setCategories(data_x);
-      // chart_temperature.xAxis[0].setCategories(data_x);
-      // chart_humidity.xAxis[0].setCategories(data_x);
-      // chart_light.xAxis[0].setCategories(data_x);
-      // chart_pressure.xAxis[0].setCategories(data_x);
-
-      chart_main.series[0].setData(data_temperature);
-      // chart_temperature.series[0].setData(data_temperature);
-
-      chart_main.series[1].setData(data_humidity);
-      // chart_humidity.series[0].setData(data_humidity);
-
-      chart_main.series[2].setData(data_light);
-      // chart_light.series[0].setData(data_light);
-
-      chart_main.series[3].setData(data_pressure);
-      // chart_pressure.series[0].setData(data_pressure);
+      // console.log(dataSensor[i][0]);
+      chart[i].xAxis[0].setCategories(dataTimeSensor[i]);
+      chart[i].series[0].setData(dataSensor[i][0])
+      chart[i].series[1].setData(dataSensor[i][1])
+      chart[i].series[2].setData(dataSensor[i][2]);
     }
+  }
 
-    function chart(type){
-      if(document.getElementById(type+'-sub').innerHTML === "Show History"){
-        document.getElementById(type+'-sub').innerHTML = "Hide History";
-        countShow++;
-      } else {
-        countShow--;
-        document.getElementById(type+'-sub').innerHTML = "Show History";
-      }
-    }
-    setInterval(update, 5000);
+  setInterval(update, 15000);
   </script>
 </head>
 
@@ -318,17 +498,17 @@
                       <div class="row">
                         <div class="col-xs-12">
                           <!-- <a href="#"> -->
-                            <div class="card summary-inline">
-                              <div class="card-body">
-                                <img src="../img/temp.svg" style="width:20%; height:auto; color:white;">
-                                <!-- <span class="icon glyphicon glyphicon-fire fa-3x"></span> -->
-                                <div class="content">
-                                  <div class="title" id="LinkIt-2-temperature"></div>
-                                  <div class="sub-title" style="font-size:2em" id="LinkIt-2-temperature-sub" onclick="chart('LinkIt-2-temperature')">Show History</div>
-                                </div>
-                                <div class="clear-both"></div>
+                          <div class="card summary-inline">
+                            <div class="card-body">
+                              <img src="../img/temp.svg" style="width:20%; height:auto; color:white;">
+                              <!-- <span class="icon glyphicon glyphicon-fire fa-3x"></span> -->
+                              <div class="content">
+                                <div class="title" id="LinkIt-2-temperature"></div>
+                                <div class="sub-title" style="font-size:2em" id="LinkIt-2-temperature-sub" onclick="chart('LinkIt-2-temperature')">Show History</div>
                               </div>
+                              <div class="clear-both"></div>
                             </div>
+                          </div>
                           <!-- </a> -->
                         </div>
                       </div>
@@ -343,16 +523,16 @@
                       <div class="row">
                         <div class="col-xs-12">
                           <!-- <a href="#"> -->
-                            <div class="card blue summary-inline">
-                              <div class="card-body">
-                                <i class="icon fa fa-tint fa-4x"></i>
-                                <div class="content">
-                                  <div class="title" id="LinkIt-2-humidity"></div>
-                                  <div class="sub-title" style="font-size:2em" id="LinkIt-2-humidity-sub" onclick="chart('LinkIt-2-humidity')">Show History</div>
-                                </div>
-                                <div class="clear-both"></div>
+                          <div class="card blue summary-inline">
+                            <div class="card-body">
+                              <i class="icon fa fa-tint fa-4x"></i>
+                              <div class="content">
+                                <div class="title" id="LinkIt-2-humidity"></div>
+                                <div class="sub-title" style="font-size:2em" id="LinkIt-2-humidity-sub" onclick="chart('LinkIt-2-humidity')">Show History</div>
                               </div>
+                              <div class="clear-both"></div>
                             </div>
+                          </div>
                           <!-- </a> -->
                         </div>
                       </div>
@@ -367,17 +547,17 @@
                       <div class="row">
                         <div class="col-xs-12">
                           <!-- <a href="#"> -->
-                            <div class="card yellow summary-inline">
-                              <div class="card-body">
-                                <!-- <i class="icon fa fa-tint fa-4x"></i> -->
-                                <i class="material-icons" style="font-size:3.5em;">wb_incandescent</i>
-                                <div class="content">
-                                  <div class="title" id="LinkIt-2-light"></div>
-                                  <div class="sub-title" style="font-size:2em" id="LinkIt-2-light-sub" onclick="chart('LinkIt-2-light')">Show History</div>
-                                </div>
-                                <div class="clear-both"></div>
+                          <div class="card yellow summary-inline">
+                            <div class="card-body">
+                              <!-- <i class="icon fa fa-tint fa-4x"></i> -->
+                              <i class="material-icons" style="font-size:3.5em;">wb_incandescent</i>
+                              <div class="content">
+                                <div class="title" id="LinkIt-2-light"></div>
+                                <div class="sub-title" style="font-size:2em" id="LinkIt-2-light-sub" onclick="chart('LinkIt-2-light')">Show History</div>
                               </div>
+                              <div class="clear-both"></div>
                             </div>
+                          </div>
                           <!-- </a> -->
                         </div>
                       </div>
@@ -392,19 +572,19 @@
                       <div class="row">
                         <div class="col-xs-12">
                           <!-- <a href="#"> -->
-                            <div class="card green summary-inline">
-                              <div class="card-body">
-                                <!-- <i class="icon fa fa-tint fa-4x"></i> 	glyphicon glyphicon-dashboard-->
-                                <!-- <i class="material-icons" style="font-size:3.5em;">wb_incandescent</i> -->
-                                <span class="icon glyphicon glyphicon-dashboard" style="font-size:4em;"></span>
-                                <div class="content">
-                                  <div class="title" id="LinkIt-2-pressure" style="font-size:2.5em;"></div>
-                                  <div class="sub-title" style="font-size:2.25em" id="LinkIt-2-pressure-sub" onclick="chart('LinkIt-2-pressure')">Show History</div>
-                                  <!-- <br/>  -->
-                                </div>
-                                <div class="clear-both"></div>
+                          <div class="card green summary-inline">
+                            <div class="card-body">
+                              <!-- <i class="icon fa fa-tint fa-4x"></i> 	glyphicon glyphicon-dashboard-->
+                              <!-- <i class="material-icons" style="font-size:3.5em;">wb_incandescent</i> -->
+                              <span class="icon glyphicon glyphicon-dashboard" style="font-size:4em;"></span>
+                              <div class="content">
+                                <div class="title" id="LinkIt-2-pressure" style="font-size:2.5em;"></div>
+                                <div class="sub-title" style="font-size:2.25em" id="LinkIt-2-pressure-sub" onclick="chart('LinkIt-2-pressure')">Show History</div>
+                                <!-- <br/>  -->
                               </div>
+                              <div class="clear-both"></div>
                             </div>
+                          </div>
                           <!-- </a> -->
                         </div>
                       </div>
@@ -417,15 +597,31 @@
                   </div>
                   <!-- chart list -->
                   <div class="row hidden-xs" style="display:none;">
-                      <div class="col-lg-6 col-lg-offset-3 col-md-6 col-sm-6 col-xs-12">
-                        <div id="chart-main" style="margin: auto;"></div>
+                    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-sm-6 col-xs-12">
+                      <div id="chart-main" style="margin: auto;"></div>
                     </center>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="eslesp1" style="margin: auto;"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="eslesp2" style="margin: auto;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="eslesp3" style="margin: auto;"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="eslesp4" style="margin: auto;"></div>
+            </div>
+          </div>
       </div>
     </div>
   </div>

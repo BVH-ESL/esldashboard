@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Monitoring System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Fonts -->
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <!-- CSS Libs -->
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/animate.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/checkbox3.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+  <link href="../flat-admin-bootstrap-templates-master/dist/lib/css/select2.min.css" rel="stylesheet" type="text/css"/>
+  <!-- CSS App -->
+  <!--<link rel="stylesheet" type="text/css" href="../../css/style.css">-->
+  <link href="../flat-admin-bootstrap-templates-master/css/style.css" rel="stylesheet" type="text/css"/>
+  <!--<link rel="stylesheet" type="text/css" href="../../css/themes/flat-blue.css">-->
+  <link href="../flat-admin-bootstrap-templates-master/css/themes/flat-blue.css" rel="stylesheet" type="text/css"/>
+  <script src="../jquery-1.8.3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  // var jsonWifiLink = "http://192.168.106.17:8080/output/q31LyMJdKrSlB2PVWNrPCB94a1dJ.json?gt[timestamp]=now%3600-1hour";   // json data link
+  var jsonWifiLink = "http://192.168.106.17:8080/output/q31LyMJdKrSlB2PVWNrPCB94a1dJ.json?limit=150";
+  var listNode = ['C4:E9:84:43:7C:06', '90:A2:DA:F0:0A:B0'];
+  var listGraph = ['#wifi1', '#wifi2'];
+  var mainTitle = ['Wifi Scanner : OpenWrt Node 1', 'Wifi Scanner : OpenWrt Node 2'];
+  var chart = [];
+  var period = 5*60*1000;
+  var data;
+  var data_mac = [[]];
+  var data_essid = [[]];
+  var data_rssi = [[]];
+  var data_channel = [[]];
+
+  var add_list = [[]];
+  var remove_list = [[]];
+
+  //init chart
+  $(function () {
+    $('#wifi1').highcharts({
+      chart: {
+        type: 'areaspline'
+      },
+      title: {
+        text: mainTitle[0]
+      },
+      xAxis: {
+        title: {
+          text: 'Channel'
+        },
+        categories: ['-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
+      },
+      yAxis: {
+        title: {
+          text: 'RSSI'
+        }
+      },
+      tooltip: {
+        pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+      },
+      plotOptions: {
+        areaspline: {
+          marker: {
+            enabled: false,
+            radius: 4,
+          },
+          fillOpacity: 0.1
+        }
+      },
+      series: []
+    });
+  });
+
+  $(function () {
+    $('#wifi2').highcharts({
+      chart: {
+        type: 'areaspline'
+      },
+      title: {
+        text: mainTitle[1]
+      },
+      xAxis: {
+        title: {
+          text: 'Channel'
+        },
+        categories: ['-1', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14']
+      },
+      yAxis: {
+        title: {
+          text: 'RSSI'
+        }
+      },
+      tooltip: {
+        pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+      },
+      plotOptions: {
+        areaspline: {
+          marker: {
+            enabled: false,
+            radius: 4,
+          },
+          fillOpacity: 0.1
+        }
+      },
+      series: []
+    });
+  });
+
+  // do for first time
+  $.getJSON(jsonWifiLink, {})
+  .done(function (json) {
+    var startHour = [];
+    for(var i = 0; i < listNode.length; i++){
+      chart [i] = $(listGraph[i]).highcharts();
+      data_mac[i] = [];
+      data_essid[i] = [];
+      data_rssi[i] = [];
+      data_channel[i] = [];
+      for(var j = 0; j < json.length; j++){
+        var date = new Date(Date.UTC(json[j].timestamp.substr(0, 4), parseInt(json[j].timestamp.substr(5, 2)) - 1, json[j].timestamp.substr(8, 2), json[j].timestamp.substr(11, 2), json[j].timestamp.substr(14, 2), json[j].timestamp.substr(17, 2)));
+        if(startHour[i] === undefined){
+          startHour[i] = date.getTime();
+        }
+        if (startHour[i] - date.getTime() >= 0 && startHour[i] - date.getTime() <= period) {
+          if(json[j].dev_id === listNode[i]){
+            if (json[j].frequency.substr(0, json[j].frequency.indexOf(" ")) < 3.0) {
+              data_channel[i].push(parseInt(json[j].channel) + 1);
+              data_essid[i].push(json[j].essid);
+              data_rssi[i].push(parseInt(json[j].rssi.substr(0, json[j].rssi.indexOf(" "))));
+              data_mac[i].push(json[j].mac);
+            }
+          }
+        } else {
+          break;
+        }
+      }
+    }
+    console.log(data_mac);
+    drawChart();
+  });
+
+  function drawChart(){
+    for(var i = 0; i < listNode.length; i++){
+      chart [i] = $(listGraph[i]).highcharts();
+      for(var j = 0; j < data_mac.length; j++){
+        var chartRSSI = [];
+        // var pointChannel = parseInt(json[i].channel) + 1;
+        var pointChannel = data_channel[i][j];
+        for (var j = 0; j < pointChannel - 2; j++) {
+          chartRSSI[j] = null;
+        }
+        chartRSSI[pointChannel - 2] = 0;
+        chartRSSI[pointChannel - 1] = (100 + data_rssi[i][j]) / 4 * 3;
+        chartRSSI[pointChannel] = 100 + data_rssi[i][j];
+        chartRSSI[pointChannel + 1] = (100 + data_rssi[i][j]) / 4 * 3;
+        chartRSSI[pointChannel + 2] = 0;
+        chart[i].addSeries({
+          name: data_essid[i][j],
+          data: chartRSSI
+        });
+        chartRSSI = [];
+      }
+    }
+  }
+
+  // setInterval(update,  24000);
+
+  function update(){
+    $.getJSON(jsonWifiLink, {})
+    .done(function (json) {
+      data = json;
+      checkData();
+      // console.log(data);
+    });
+  }
+
+  function checkData(){
+    for (var i = 0; i < listNode.length; i++) {
+
+      for(var j = 0; j < data.length; j++){
+        if(data[j].dev_id === listNode[i]){
+          // if (data[j].frequency.substr(0, data[j].frequency.indexOf(" ")) < 3.0) {
+          //   if(data_mac[i].indexOf(data[j].mac) != -1){
+          //     console.log("kdk");
+          //   }
+          // }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="flat-blue">
+  <div class="app-container">
+    <div class="row content-container">
+      <!--top menu-->
+      <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-expand-toggle">
+              <i class="fa fa-bars icon"></i>
+            </button>
+            <ol class="breadcrumb navbar-breadcrumb">
+              <li class="active">Wifi Scan</li>
+            </ol>
+          </div>
+        </div>
+      </nav>
+      <!--slide menu-->
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="side-menu-container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="../#">
+                <div class="icon fa fa-television"></div>
+                <div class="title">Monitoring System</div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                <i class="fa fa-times icon"></i>
+              </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li class="">
+                <a href="index.html">
+                  <span class="icon fa fa-tachometer"></span><span class="title">Dashboard</span>
+                </a>
+              </li>
+              <li class="active">
+                <a href="wifiscan.html">
+                  <span class="icon fa fa-wifi"></span><span class="title">Wifi scan</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="client.html">
+                  <span class="glyphicon glyphicon-user icon"> </span><span class="title">Clients scan</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="pingtest.html">
+                  <span class="icon fa fa-server"></span><span class="title">Ping testing</span>
+                </a>
+              </li>
+              <li class="">
+                <a href="environment.html">
+                  <span class="icon fa fa-home"></span><span class="title">Room Monitoring </span>
+                </a>
+              </li>
+              <li class="">
+                <a href="">
+                  <span class="icon fa fa-bell-o"></span><span class="title">Alarm System</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <!-- Main Content -->
+      <div class="container-fluid">
+        <div class="side-body padding-top">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="wifi1" style="margin: auto;"></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div id="wifi2" style="margin: auto;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="app-footer">
+    <div class="wrapper">
+      <span class="pull-right"><a href=""><i class="fa fa-long-arrow-up"></i></a></span> © 2016 ESL@KMUTNB.
+    </div>
+  </footer>
+  <!-- Javascript Libs -->
+  <!-- ๋ฆ App -->
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/bootstrap-switch.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/Chart.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.dataTables.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.matchHeight-min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/jquery.min.js" type="text/javascript"></script>
+  <script src="../flat-admin-bootstrap-templates-master/dist/lib/js/select2.full.min.js" type="text/javascript"></script>
+  <!-- Javascript -->
+  <!--<script type="text/javascript" src="../../js/app.js"></script>-->
+  <script src="../flat-admin-bootstrap-templates-master/js/app.js" type="text/javascript"></script>
+  <!--<script type="text/javascript" src="../../js/index.js"></script>-->
+  <script src="../flat-admin-bootstrap-templates-master/js/index.js" type="text/javascript"></script>
+  <!-- chart lib -->
+  <script src="../chart/Highcharts-4.2.1/js/highcharts.js" type="text/javascript"></script>
+  <script src="../chart/Highcharts-4.2.1/js/modules/exporting.js" type="text/javascript"></script>
+</body>
+
+</html>

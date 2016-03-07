@@ -26,7 +26,7 @@
   <script type="text/javascript">
     // var numNode = 1;
     var listNode = ['esl-openwrt'];
-    var jsonPingLink = "http://192.168.106.17:8080/output/dm13yy2OX9UDgK6wMQNZT0JOZ4Ao.json?limit=150";
+    var jsonPingLink = "http://192.168.106.17:8080/output/dm13yy2OX9UDgK6wMQNZT0JOZ4Ao.json?limit=100";
     var mainTitle = ['Ping testing : OpenWrt Node 1'];
     var data;
     var period = 12*60*60*1000;
@@ -107,7 +107,7 @@
               temp_data_avg[chartIndex][count] = parseFloat(data[j].rtt_avg);
 
               if (chartIndex === 0) {
-                data_x[i][count] = date.getDay() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
+                data_x[i][count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
                 count++;
               }
             }

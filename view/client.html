@@ -61,6 +61,7 @@
           stackLabels: {
             enabled: true,
             style: {
+              fontSize: "14px",
               fontWeight: 'bold',
               color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
             }
@@ -86,9 +87,10 @@
                 stacking: 'normal',
                 dataLabels: {
                     enabled: true,
-                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
                     style: {
-                        textShadow: '0 0 3px black'
+                        fontSize: "14px",
+                        // textShadow: '0 0 4px black'
                     }
                 }
             },
@@ -130,6 +132,7 @@
           stackLabels: {
             enabled: true,
             style: {
+              fontSize: "14px",
               fontWeight: 'bold',
               color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
             }
@@ -155,9 +158,10 @@
                 stacking: 'normal',
                 dataLabels: {
                     enabled: true,
-                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
                     style: {
-                        textShadow: '0 0 3px black'
+                      fontSize: "14px",
+                      // textShadow: '0 0 3px black'
                     }
                 }
             }
@@ -200,7 +204,7 @@
             if(startHour[i][count] === undefined){
               startHour[i][count] = date.getTime();
             }
-            data_x[i][count] = date.getDay() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
+            data_x[i][count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
             if (startHour[i][count] - date.getTime() >= 0 && startHour[i][count] - date.getTime() <= period) {
               // console.log(data[j].rssi);
               if(parseInt(data[j].rssi) < -60){
