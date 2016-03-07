@@ -299,6 +299,13 @@
 
   function update(){
     $.getJSON(jsonEnvironmentLink, function() {
+      for(var i = 0; i < listSensorNode.length; i++){
+        var chartId = "#eslesp"+(i+1);
+        chart[i] = $(chartId).highcharts();
+        if(chart[i].series[0].data.length === 0){
+          chart[i].showLoading();
+        }
+      }
       updateSensorNode();
     })
     .done(function (json) {
@@ -369,10 +376,19 @@
   }
 
   function updateSensorNode(){
-    $.getJSON(jsonSensorNodeLink,  {})
+    $.getJSON(jsonSensorNodeLink, function() {
+      // for(var i = 0; i < listSensorNode.length; i++){
+      //   var chartId = "#eslesp"+(i+1);
+      //   chart[i] = $(chartId).highcharts();
+      //   if(chart[i].series[0].data.length === 0){
+      //     chart[i].showLoading();
+      //   }
+      // }
+    })
     .done(function (json) {
       // console.log(json);
       dataJSONSensor = json;
+
       drawSensorGraph();
     });
   }
@@ -407,6 +423,7 @@
         }
       }
       // console.log(dataSensor[i][0]);
+      chart[i].hideLoading();
       chart[i].xAxis[0].setCategories(dataTimeSensor[i]);
       chart[i].series[0].setData(dataSensor[i][0])
       chart[i].series[1].setData(dataSensor[i][1])

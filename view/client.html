@@ -253,7 +253,17 @@
     }
 
     function update(){
-      $.getJSON(jsonClientsLink, {})
+      for(var i = 0; i < listNode.length; i++){
+        var chartId = "#client"+(i+1);
+        chart[i] = $(chartId).highcharts();
+        // console.log(chart[i].series.data);
+        if(chart[i].series[0].data.length === 0){
+          chart[i].showLoading();
+        }
+      }
+      $.getJSON(jsonClientsLink, function(){
+
+      })
       .done(function (json) {
         data = json;
         draw();
