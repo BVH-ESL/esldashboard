@@ -113,8 +113,9 @@
   // do for first time
   $.getJSON(jsonWifiLink, {})
   .done(function (json) {
-    var startHour = [];
+    // console.log(json.length);
     for(var i = 0; i < listNode.length; i++){
+      var startHour = 0;
       chart [i] = $(listGraph[i]).highcharts();
       data_mac[i] = [];
       data_essid[i] = [];
@@ -122,36 +123,43 @@
       data_channel[i] = [];
       for(var j = 0; j < json.length; j++){
         var date = new Date(Date.UTC(json[j].timestamp.substr(0, 4), parseInt(json[j].timestamp.substr(5, 2)) - 1, json[j].timestamp.substr(8, 2), json[j].timestamp.substr(11, 2), json[j].timestamp.substr(14, 2), json[j].timestamp.substr(17, 2)));
-        if(startHour[i] === undefined){
-          startHour[i] = date.getTime();
+        if(startHour === 0){
+          startHour = date.getTime();
         }
-        if (startHour[i] - date.getTime() >= 0 && startHour[i] - date.getTime() <= period) {
+        if (startHour - date.getTime() >= 0 && startHour - date.getTime() <= period) {
           if(json[j].dev_id === listNode[i]){
             if (json[j].frequency.substr(0, json[j].frequency.indexOf(" ")) < 3.0) {
-              data_channel[i].push(parseInt(json[j].channel) + 1);
-              data_essid[i].push(json[j].essid);
-              data_rssi[i].push(parseInt(json[j].rssi.substr(0, json[j].rssi.indexOf(" "))));
-              data_mac[i].push(json[j].mac);
+                if(data_mac[i].indexOf(json[j].mac) === -1){
+                data_channel[i].push(parseInt(json[j].channel) + 1);
+                data_essid[i].push(json[j].essid);
+                data_rssi[i].push(parseInt(json[j].rssi.substr(0, json[j].rssi.indexOf(" "))));
+                data_mac[i].push(json[j].mac);
+              }
             }
           }
-        } else {
+        }else{
           break;
         }
       }
     }
-    console.log(data_mac);
+    // console.log(data_mac);
     drawChart();
   });
 
   function drawChart(){
     for(var i = 0; i < listNode.length; i++){
+      // var chartRSSI = [[]];
+      // console.log(data_mac[i].length);
       chart [i] = $(listGraph[i]).highcharts();
-      for(var j = 0; j < data_mac.length; j++){
+      // console.log(data_mac[i].length);
+      for(var j = 0; j < data_mac[i].length; j++){
+      //   // console.log('skdi');
         var chartRSSI = [];
-        // var pointChannel = parseInt(json[i].channel) + 1;
+      //   // // var pointChannel = parseInt(json[i].channel) + 1;
         var pointChannel = data_channel[i][j];
-        for (var j = 0; j < pointChannel - 2; j++) {
-          chartRSSI[j] = null;
+      //   console.log(pointChannel);
+        for (var k = 0; k < pointChannel - 2; k++) {
+          chartRSSI[k] = null;
         }
         chartRSSI[pointChannel - 2] = 0;
         chartRSSI[pointChannel - 1] = (100 + data_rssi[i][j]) / 4 * 3;
@@ -162,12 +170,11 @@
           name: data_essid[i][j],
           data: chartRSSI
         });
-        chartRSSI = [];
       }
     }
   }
 
-  // setInterval(update,  24000);
+  setInterval(update,  24000);
 
   function update(){
     $.getJSON(jsonWifiLink, {})
@@ -180,17 +187,22 @@
 
   function checkData(){
     for (var i = 0; i < listNode.length; i++) {
-
+      var startHour = 0;
       for(var j = 0; j < data.length; j++){
-        if(data[j].dev_id === listNode[i]){
-          // if (data[j].frequency.substr(0, data[j].frequency.indexOf(" ")) < 3.0) {
-          //   if(data_mac[i].indexOf(data[j].mac) != -1){
-          //     console.log("kdk");
-          //   }
-          // }
+        var date = new Date(Date.UTC(data[j].timestamp.substr(0, 4), parseInt(data[j].timestamp.substr(5, 2)) - 1, data[j].timestamp.substr(8, 2), data[j].timestamp.substr(11, 2), data[j].timestamp.substr(14, 2), data[j].timestamp.substr(17, 2)));
+        if(startHour === 0){
+          startHour = date.getTime();
+        }
+        if (startHour - date.getTime() >= 0 && startHour - date.getTime() <= period) {
+          if(data[j].dev_id === listNode[i]){
+            if (data[j].frequency.substr(0, data[j].frequency.indexOf(" ")) < 3.0) {
+
+            }
+          }
         }
       }
     }
+    // drawChart();
   }
   </script>
 </head>

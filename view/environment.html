@@ -405,14 +405,14 @@
       dataSensor[i][1] = [];
       dataSensor[i][2] = [];
       for(var j = dataJSONSensor.length-1; j>=0; j--){
-        if(dataJSONSensor[j].dev_id === listSensorNode[i]){
-          var date = new Date(Date.UTC(dataJSONSensor[j].timestamp.substr(0, 4), parseInt(dataJSONSensor[j].timestamp.substr(5, 2)) - 1, dataJSONSensor[j].timestamp.substr(8, 2), dataJSONSensor[j].timestamp.substr(11, 2), dataJSONSensor[j].timestamp.substr(14, 2), dataJSONSensor[j].timestamp.substr(17, 2)));
-          if(startHour[i] === undefined){
-            startHour[i] = date.getTime();
-          }
-          // console.log(date.getTime() - startHour[i]);
-          // console.log(period);
-          if(date.getTime() - startHour[i] >= 0 && date.getTime() - startHour[i] <= period){
+        var date = new Date(Date.UTC(dataJSONSensor[j].timestamp.substr(0, 4), parseInt(dataJSONSensor[j].timestamp.substr(5, 2)) - 1, dataJSONSensor[j].timestamp.substr(8, 2), dataJSONSensor[j].timestamp.substr(11, 2), dataJSONSensor[j].timestamp.substr(14, 2), dataJSONSensor[j].timestamp.substr(17, 2)));
+        if(startHour[i] === undefined){
+          startHour[i] = date.getTime();
+        }
+        // console.log(date.getTime() - startHour[i]);
+        // console.log(period);
+        if(date.getTime() - startHour[i] >= 0 && date.getTime() - startHour[i] <= period){
+          if(dataJSONSensor[j].dev_id === listSensorNode[i]){
             dataTimeSensor[i][count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes() + ':'+date.getSeconds();
             dataSensor[i][0][count] = parseFloat(dataJSONSensor[j].temperature);
             dataSensor[i][1][count] = parseFloat(dataJSONSensor[j].humidity);
@@ -420,6 +420,8 @@
             count++;
             // console.log(date.getDate());
           }
+        }else{
+          break;
         }
       }
       // console.log(dataSensor[i][0]);
