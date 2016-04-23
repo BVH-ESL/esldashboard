@@ -5,28 +5,40 @@
     <title></title>
     <link rel="stylesheet" href="reveal/css/reveal.css">
     <link rel="stylesheet" href="reveal/css/theme/white.css" id="theme">
+		<script src="jquery-1.8.3.min.js" type="text/javascript"></script>
     <script>
     var link = document.createElement( 'link' );
     link.rel = 'stylesheet';
     link.type = 'text/css';
     link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
     document.getElementsByTagName( 'head' )[0].appendChild( link );
+		function getdata(){
+		$.getJSON("http://cpre.kmutnb.ac.th/esl/share/get_meter_data.php", function(){
+
+    })
+    .done(function (json) {
+      data = json;
+			console.log(data[1]['energy']);
+      // draw();
+    });
+	}
+	setInterval(getdata, 10000);
     </script>
   </head>
-  <body>
-    <div class="reveal">
+  <body onload="getdata()">
+    <!-- <div class="reveal">
       <div class="slides">
         <section data-background-iframe="view/wifiscan.html">
           <!-- dsd -->
-        </section>
+        <!-- </section>
         <section data-background-iframe="view/client.html">
         </section>
         <section data-background-iframe="view/pingtest.html">
         </section>
         <section data-background-iframe="view/environment.html">
         </section>
-      </div>
-    </div>
+      </div> --> -->
+    <!-- </div> -->
 
     <script src="reveal/lib/js/head.min.js"></script>
 		<script src="reveal/js/reveal.js"></script>

@@ -26,7 +26,7 @@
   <script type="text/javascript">
   // var numNode = 1;
   var listNode = ['esl-openwrt', 'esl-yun1'];
-  var jsonClientsLink = "http://192.168.106.17:8080/output/3jZmxE01ElIKwXmAbv2WTql0mwrL.json";
+  var jsonClientsLink = "http://192.168.106.17:8080/output/3jZmxE01ElIKwXmAbv2WTql0mwrL.json?limit=500";
   var mainTitle = ['Wifi Client Scan : OpenWrt Node 1', 'Wifi Client Scan : OpenWrt Node 2'];
   var data;
   var dataClientMin = [];
@@ -205,10 +205,10 @@
           startHour[i][count] = date.getTime();
         }
         data_x[i][count] = date.getDate() + '-' + (date.getMonth() + 1) + '/' + date.getHours() + ':' + date.getMinutes();
+        // console.log(startHour[i][count] - date.getTime());
         if(data[j].dev_id === listNode[i]){
+          // console.log('skd');
           if (startHour[i][count] - date.getTime() >= 0 && startHour[i][count] - date.getTime() <= period) {
-            // console.log(data[j].rssi);
-
             if(parseInt(data[j].rssi) < -60){
               if(listClientMax.indexOf(data[j].mac) === -1){
                 listClientMax.push(data[j].mac);
@@ -222,32 +222,33 @@
                 listClientMin.push(data[j].mac);
               }
             }
-          }else if(count < numChartData){
-            // console.log(countClient);
-            // if(listClientMin.length != 0)
-            dataClientMin[i][count] = listClientMin.length;
-            // else
-            // dataClientMin[i][count] = 0.5;
-            while(listClientMin.length > 0){
-              listClientMin.pop();
-            }
+          }else if (count < numChartData){
+              console.log(count);
+              // if(listClientMin.length != 0)
+              dataClientMin[i][count] = listClientMin.length;
+              // else
+              // dataClientMin[i][count] = 0.5;
+              while(listClientMin.length > 0){
+                listClientMin.pop();
+              }
 
-            dataClientMed[i][count] = listClientMed.length;
-            while(listClientMed.length > 0){
-              listClientMed.pop();
-            }
+              dataClientMed[i][count] = listClientMed.length;
+              while(listClientMed.length > 0){
+                listClientMed.pop();
+              }
 
-            dataClientMax[i][count] = listClientMax.length;
-            while(listClientMax.length > 0){
-              listClientMax.pop();
-            }
-            count++;
+              dataClientMax[i][count] = listClientMax.length;
+              while(listClientMax.length > 0){
+                listClientMax.pop();
+              }
+              count++;
           }
-        }else{
-          break;
         }
+        // else{
+        //   break;
+        // }
       }
-      // console.log(dataClientMed[i]);
+      // console.log(dataClientMin[i]);
       chart[i].xAxis[0].setCategories(data_x[i]);
       chart[i].series[2].setData(dataClientMin[i]);
       chart[i].series[1].setData(dataClientMed[i]);
@@ -270,16 +271,10 @@
     })
     .done(function (json) {
       data = json;
-      // console.log(data);
       draw();
     });
   }
-  // function clearList(list){
-  //   while(list.length > 0){
-  //     list.pop();
-  //   }
-  // }
-  setInterval(update, 18000);
+  setInterval(update, 180000);
   </script>
 </head>
 
